@@ -3,22 +3,13 @@ package com.example.FullFledgedOrderPart.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
 @Table(name = "customerOrder")
 public class CustomerOrder {
-
-    public CustomerOrder(){}
-
-    public CustomerOrder(Long id, String orderNumber, LocalDateTime orderDate, BigDecimal totalAmount, String orderStatus, String shippingAddress) {
-        this.id = id;
-        this.orderNumber = orderNumber;
-        this.orderDate = orderDate;
-        this.totalAmount = totalAmount;
-        this.orderStatus = orderStatus;
-        this.shippingAddress = shippingAddress;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,13 +32,30 @@ public class CustomerOrder {
 
     private Long userId;
 
-    public Long getUserId() {
-        return userId;
+    private Long quantity;
+
+    private Long productId;
+
+    @Transient
+    private List<ProductInventory> productList = new ArrayList<>();
+
+      CustomerOrder(){
+
     }
 
-    public void setUserId(Long userId) {
+    public CustomerOrder(Long id, String orderNumber, LocalDateTime orderDate, BigDecimal totalAmount, String orderStatus, String shippingAddress, Long userId, Long quantity, Long productId, List<ProductInventory> productList) {
+        this.id = id;
+        this.orderNumber = orderNumber;
+        this.orderDate = orderDate;
+        this.totalAmount = totalAmount;
+        this.orderStatus = orderStatus;
+        this.shippingAddress = shippingAddress;
         this.userId = userId;
+        this.quantity = quantity;
+        this.productId = productId;
+        this.productList = productList;
     }
+
 
     public Long getId() {
         return id;
@@ -97,6 +105,38 @@ public class CustomerOrder {
         this.shippingAddress = shippingAddress;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public List<ProductInventory> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<ProductInventory> productList) {
+        this.productList = productList;
+    }
+
     @Override
     public String toString() {
         return "CustomerOrder{" +
@@ -107,6 +147,9 @@ public class CustomerOrder {
                 ", orderStatus='" + orderStatus + '\'' +
                 ", shippingAddress='" + shippingAddress + '\'' +
                 ", userId=" + userId +
+                ", quantity=" + quantity +
+                ", productId=" + productId +
+                ", productList=" + productList +
                 '}';
     }
 }

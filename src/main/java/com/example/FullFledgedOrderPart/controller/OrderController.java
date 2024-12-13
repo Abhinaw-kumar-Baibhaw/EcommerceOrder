@@ -24,7 +24,6 @@ public class OrderController {
 
     @PostMapping("/create")
     public CustomerOrder create(@RequestBody CustomerOrder customerOrder){
-        System.out.println(customerOrder.getOrderDate());
        return orderService.createOrder(customerOrder);
     }
 
