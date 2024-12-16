@@ -1,6 +1,8 @@
 package com.example.FullFledgedOrderPart.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ public class CustomerOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @NotBlank(message = "orderNumber is required")
     @Column(name = "order_number")
     private String orderNumber;
 

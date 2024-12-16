@@ -1,15 +1,13 @@
 package com.example.FullFledgedOrderPart.serviceImp;
 
-
 import com.example.FullFledgedOrderPart.entity.CustomerOrder;
 import com.example.FullFledgedOrderPart.entity.ProductInventory;
+import com.example.FullFledgedOrderPart.exception.NoEnoughInventoryException;
 import com.example.FullFledgedOrderPart.repo.OrderRepo;
 import com.example.FullFledgedOrderPart.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +21,14 @@ public class OrderServiceImplementation implements OrderService {
     @Autowired
     private RestTemplate restTemplate;
 
+//    @Autowired
+//    private KafkaTemplate<String,String> kafkaTemplate;
+//
+//   public OrderServiceImplementation(KafkaTemplate<String,String> kafkaTemplate){
+//        this.kafkaTemplate = kafkaTemplate;
+//    }
 
-
+//    private static final String ORDER_TOPIC = "order-created";
 
     public CustomerOrder createOrder(CustomerOrder customerOrder) {
         Optional<CustomerOrder> byId = orderRepo.findById(customerOrder.getUserId());
@@ -39,8 +43,17 @@ public class OrderServiceImplementation implements OrderService {
                 product.setQuantity(actualQuantity);
                 restTemplate.put("http://FULLFLEDGEDINVENTORYPART/inventory/update/" + customerOrder.getProductId(),
                         new ProductInventory(product.getProductId(), actualQuantity));
+
+                String orderMessage = "Order Created: UserId=" + customerOrder1.getUserId() +
+                        ", ProductId=" + customerOrder1.getProductId() +
+                        ", Quantity=" + customerOrder1.getQuantity() +
+                        ", Remaining Quantity=" + actualQuantity;
+
+//                kafkaTemplate.send(ORDER_TOPIC, orderMessage);
+                System.out.println(orderMessage);
+
             } else {
-                throw new IllegalArgumentException("Not enough inventory for productId " + customerOrder.getProductId());
+                throw new NoEnoughInventoryException("Not enough inventory for productId " + customerOrder.getProductId());
             }
         }
         return customerOrder;
