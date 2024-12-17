@@ -6,6 +6,7 @@ import com.example.FullFledgedOrderPart.exception.NoEnoughInventoryException;
 import com.example.FullFledgedOrderPart.repo.OrderRepo;
 import com.example.FullFledgedOrderPart.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.util.List;
@@ -21,14 +22,14 @@ public class OrderServiceImplementation implements OrderService {
     @Autowired
     private RestTemplate restTemplate;
 
-//    @Autowired
-//    private KafkaTemplate<String,String> kafkaTemplate;
-//
-//   public OrderServiceImplementation(KafkaTemplate<String,String> kafkaTemplate){
-//        this.kafkaTemplate = kafkaTemplate;
-//    }
+    @Autowired
+    private KafkaTemplate<String,String> kafkaTemplate;
 
-//    private static final String ORDER_TOPIC = "order-created";
+   public OrderServiceImplementation(KafkaTemplate<String,String> kafkaTemplate){
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    private static final String ORDER_TOPIC = "order-created";
 
     public CustomerOrder createOrder(CustomerOrder customerOrder) {
         Optional<CustomerOrder> byId = orderRepo.findById(customerOrder.getUserId());
@@ -48,8 +49,7 @@ public class OrderServiceImplementation implements OrderService {
                         ", ProductId=" + customerOrder1.getProductId() +
                         ", Quantity=" + customerOrder1.getQuantity() +
                         ", Remaining Quantity=" + actualQuantity;
-
-//                kafkaTemplate.send(ORDER_TOPIC, orderMessage);
+                kafkaTemplate.send(ORDER_TOPIC, orderMessage);
                 System.out.println(orderMessage);
 
             } else {
