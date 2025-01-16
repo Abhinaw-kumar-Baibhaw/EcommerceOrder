@@ -3,6 +3,7 @@ package com.example.FullFledgedOrderPart.controller;
 import com.example.FullFledgedOrderPart.entity.CustomerOrder;
 import com.example.FullFledgedOrderPart.entity.User;
 import com.example.FullFledgedOrderPart.service.OrderService;
+import jakarta.persistence.Cacheable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

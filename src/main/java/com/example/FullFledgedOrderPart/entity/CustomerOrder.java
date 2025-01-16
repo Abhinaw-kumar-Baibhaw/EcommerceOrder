@@ -3,6 +3,7 @@ package com.example.FullFledgedOrderPart.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "customerOrder")
-public class CustomerOrder {
+public class CustomerOrder implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
