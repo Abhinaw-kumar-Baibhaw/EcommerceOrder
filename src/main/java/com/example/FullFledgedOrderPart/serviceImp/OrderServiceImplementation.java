@@ -71,19 +71,19 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    @Cacheable(cacheNames = "orders", key = "#userId")
+//    @Cacheable(cacheNames = "orders", key = "#userId")
     public Optional<CustomerOrder> getById(Long userId) {
         System.out.println("Fetching data from database");
         // First, try to fetch order from Redis
-        CustomerOrder order = redisService.getOrderFromRedis(userId);
-        if (order != null) {
-            return Optional.of(order);  // Return the cached order from Redis
-        }
+//        CustomerOrder order = redisService.getOrderFromRedis(userId);
+//        if (order != null) {
+//            return Optional.of(order);  // Return the cached order from Redis
+//        }
         return orderRepo.findById(userId); // If not found in Redis, fetch from database
     }
 
     @Override
-    @Cacheable(value = "userOrders", key = "#userId")
+//    @Cacheable(value = "userOrders", key = "#userId")
     public List<CustomerOrder> getOrdersByUserId(Long userId) {
         return orderRepo.findUserByUserId(userId);
     }
